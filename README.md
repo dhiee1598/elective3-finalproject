@@ -1,6 +1,6 @@
 # Blog Application
 
-## Overview
+### Overview
 The **Blog Application** is a feature-rich platform that allows users to create, edit, 
 and share blog posts. It provides an intuitive interface for managing content, user 
 authentication, and social interactions.
