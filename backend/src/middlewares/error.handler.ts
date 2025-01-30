@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from "express";
 import env from "../utilities/env";
 import { ErrorResponse } from "@interfaces/error.props";
@@ -17,7 +18,7 @@ export const ErrorHandler = (
   error: ErrorResponse,
   _req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) => {
   // * Determine the HTTP status code to send in the response
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
@@ -30,6 +31,4 @@ export const ErrorHandler = (
     message: error.message,
     stacks: env.NODE_ENV === "production" ? "🍪" : error.stack,
   });
-
-  next(error);
 };
