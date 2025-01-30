@@ -12,7 +12,9 @@
     "noImplicitAny": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "types": ["node", "./src/interfaces"]
+    "paths": {
+      "@interfaces/*": ["interfaces/*"]
+    }  
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules/"]
