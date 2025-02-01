@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePostUsers } from "@/hooks/usePost";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { isAxiosError } from "axios";
+import ErrorMessage from "@/components/ErrorMessage";
+import SuccessMessage from "@/components/SuccessMessage";
 
 const initial_value = {
   name: "",
@@ -11,10 +16,33 @@ const initial_value = {
 
 const SignUpPage = () => {
   const [values, setValues] = useState(initial_value);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const router = useRouter();
+  const { createNewUser } = usePostUsers("/api/users/auth/sign-up");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      await createNewUser.mutateAsync(values);
+      setValues(initial_value);
+      setTimeout(() => {
+        router.push("/sign-in");
+      }, 3000);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const message =
+          error.response?.data?.message || "An unexpected error occurred";
+        setErrorMessage(message);
+      } else if (error instanceof Error) {
+        setErrorMessage(
+          error.message || "Something went wrong. Please try again later.",
+        );
+      } else {
+        setErrorMessage("An unknown error occurred. Please try again.");
+      }
+    }
   };
 
   return (
@@ -25,6 +53,16 @@ const SignUpPage = () => {
           onSubmit={handleSubmit}
           className="w-full p-5 md:p-10 backdrop-blur-2xl shadow-md shadow-stone-950 bg-transparent md:rounded-md"
         >
+          {createNewUser.isError && <ErrorMessage message={errorMessage} />}
+          {createNewUser.isSuccess && (
+            <SuccessMessage message="User successfully registered." />
+          )}
+          {createNewUser.isSuccess && (
+            <p className="flex items-center justify-center">
+              Redirecting to Sign In Page
+              <RefreshIcon className="animate-spin ml-2" />
+            </p>
+          )}
           <div className="flex flex-col mb-2">
             <label className="font-extralight mb-2">Name:</label>
             <input
