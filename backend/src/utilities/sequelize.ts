@@ -12,7 +12,7 @@ if (env.NODE_ENV === "production") {
 } else {
   sequelize = new Sequelize({
     dialect: "sqlite",
-    storage: "../../dbsqlite.sqlite3",
+    storage: "dbsqlite.sqlite3",
   });
 }
 
