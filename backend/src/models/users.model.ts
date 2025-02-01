@@ -5,7 +5,7 @@ import sequelize from "../utilities/sequelize";
 const Users = sequelize.define<UsersProps>(
   "Users",
   {
-    id: {
+    userId: {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,

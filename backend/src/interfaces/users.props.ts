@@ -10,7 +10,7 @@ export interface UsersProps
     InferAttributes<UsersProps>,
     InferCreationAttributes<UsersProps>
   > {
-  id: CreationOptional<string>;
+  userId: CreationOptional<string>;
   name: string;
   email: string;
   password: string;
