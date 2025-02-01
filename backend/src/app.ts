@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import env from "./utilities/env";
 import { NotFound, ErrorHandler } from "./middlewares/error.handler";
+import UserRoutes from "./routes/users.route";
 
 const ExpressConfig = (): Application => {
   const app = express();
@@ -25,6 +26,9 @@ const ExpressConfig = (): Application => {
   app.get("/main/healthcheck", (_req: Request, res: Response) => {
     res.status(200).json({ message: "HAPPY CODING - 👋✨🌍" });
   });
+
+  // * API ROUTES FOR USERS
+  app.use("/api/users", UserRoutes);
 
   // ! CATCH ALL ERROR HANDLING
   app.use(NotFound); // Handle 404 errors (Not Found)
