@@ -7,6 +7,7 @@ const env = cleanEnv(process.env, {
   SERVER_URL: url(),
   FRONTEND_URL: url(),
   NODE_ENV: str({ choices: ["development", "production"] }),
+  CONNECTION_URI: url(),
 });
 
 export default env;
