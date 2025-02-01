@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
-import { UserProps } from "../interfaces/user.props";
+import { UsersProps } from "../interfaces/users.props";
 import sequelize from "../utilities/sequelize";
 
-const Users = sequelize.define<UserProps>(
+const Users = sequelize.define<UsersProps>(
   "Users",
   {
     id: {
@@ -32,7 +32,7 @@ const Users = sequelize.define<UserProps>(
   },
 );
 
-Users.prototype.toJSON = function (): UserProps {
+Users.prototype.toJSON = function (): UsersProps {
   return {
     ...this.get(),
     password: undefined,
