@@ -17,7 +17,7 @@ export const GetUsersByEmail = async (email: string) => {
 // Function to insert a new user
 export const InsertUsers = async (values: UsersNewRequest) => {
   try {
-    return await Users.create(values);
+    return await Users.create({ ...values, isAdmin: false });
   } catch (error) {
     throw new Error(
       error instanceof Error

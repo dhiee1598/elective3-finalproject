@@ -24,6 +24,10 @@ const Users = sequelize.define<UsersProps>(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   },
   {
     tableName: "users",
