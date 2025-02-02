@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from "express";
 import env from "../utilities/env";
-import { ErrorResponse } from "@interfaces/error.props";
+import { ErrorResponse } from "../interfaces/error.props";
 
 export const NotFound = (req: Request, res: Response, next: NextFunction) => {
   // * Set HTTP status code to 404 (Not Found)

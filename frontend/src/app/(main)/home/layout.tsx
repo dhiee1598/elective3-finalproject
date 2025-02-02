@@ -1,5 +1,11 @@
+import AuthWrapper from "@/components/AuthWrapper";
+
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
+  return (
+    <>
+      <AuthWrapper isAdmin={false}>{children}</AuthWrapper>
+    </>
+  );
 };
 
 export default MainLayout;

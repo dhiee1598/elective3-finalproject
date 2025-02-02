@@ -1,6 +1,6 @@
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import api from "../utilities/axios";
-import { NewUserProps } from "../interfaces/users.props";
+import { NewUsersProps, AuthUsersProps } from "@/interfaces/users.props";
 
 const queryClient = new QueryClient();
 
@@ -8,7 +8,7 @@ export const usePostUsers = (url: string) => {
   const createNewUser = useMutation({
     mutationFn: async (values: object) => {
       const response = await api.post(url, { ...values });
-      return response.data.users as NewUserProps;
+      return response.data.users as NewUsersProps;
     },
     onSettled: async (data, error) => {
       if (!error) {
@@ -21,4 +21,23 @@ export const usePostUsers = (url: string) => {
   });
 
   return { createNewUser };
+};
+
+export const usePostAuthUsers = (url: string) => {
+  const authUsers = useMutation({
+    mutationFn: async (values: object) => {
+      const response = await api.post(url, { ...values });
+      return response.data as AuthUsersProps;
+    },
+    onSettled: async (data, error) => {
+      if (!error) {
+        console.log(data);
+        await queryClient.invalidateQueries({
+          queryKey: ["users", data?.users.userId],
+        });
+      }
+    },
+  });
+
+  return { authUsers };
 };

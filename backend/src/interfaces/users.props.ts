@@ -14,6 +14,7 @@ export interface UsersProps
   name: string;
   email: string;
   password: string;
+  isAdmin: boolean;
 }
 
 export interface UsersNewRequest {
@@ -26,4 +27,9 @@ export interface UsersResponse {
   message?: string;
   users?: UsersProps | UsersProps[];
   accessToken?: string;
+}
+
+export interface UsersAuthRequest {
+  email: string;
+  password: string;
 }

@@ -3,7 +3,7 @@
 import api from "@/utilities/axios";
 import { useRouter } from "next/navigation";
 
-const MainPage = () => {
+const AdminPage = () => {
   const router = useRouter();
 
   const handleSubmit = async () => {
@@ -15,10 +15,10 @@ const MainPage = () => {
 
   return (
     <div>
-      <h1>MAIN PAGE</h1>
+      <h1>ADMIN PAGE</h1>
       <button onClick={() => handleSubmit()}>Logout</button>
     </div>
   );
 };
 
-export default MainPage;
+export default AdminPage;

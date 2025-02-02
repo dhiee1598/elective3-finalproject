@@ -1,11 +1,14 @@
+import AuthWrapper from "@/components/AuthWrapper";
 import Header from "../../components/Header";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
-      <Header />
-      {children}
-    </div>
+    <>
+      <AuthWrapper>
+        <Header />
+        {children}
+      </AuthWrapper>
+    </>
   );
 };
 
