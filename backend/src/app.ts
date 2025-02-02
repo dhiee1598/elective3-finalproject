@@ -29,7 +29,7 @@ const ExpressConfig = (): Application => {
   });
 
   // * API ROUTES FOR TOKEN
-  app.use("/auth/token", TokenRoutes);
+  app.use("/api/auth/token", TokenRoutes);
 
   // * API ROUTES FOR USERS
   app.use("/api/users", UserRoutes);
