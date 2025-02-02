@@ -27,3 +27,8 @@ export interface UsersResponse {
   users?: UsersProps | UsersProps[];
   accessToken?: string;
 }
+
+export interface UsersAuthRequest {
+  email: string;
+  password: string;
+}

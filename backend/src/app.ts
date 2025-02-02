@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import env from "./utilities/env";
 import { NotFound, ErrorHandler } from "./middlewares/error.handler";
 import UserRoutes from "./routes/users.route";
+import TokenRoutes from "./routes/token.route";
 
 const ExpressConfig = (): Application => {
   const app = express();
@@ -26,6 +27,9 @@ const ExpressConfig = (): Application => {
   app.get("/main/healthcheck", (_req: Request, res: Response) => {
     res.status(200).json({ message: "HAPPY CODING - 👋✨🌍" });
   });
+
+  // * API ROUTES FOR TOKEN
+  app.use("/auth/token", TokenRoutes);
 
   // * API ROUTES FOR USERS
   app.use("/api/users", UserRoutes);
