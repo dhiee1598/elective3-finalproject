@@ -40,7 +40,7 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (error) {
-        console.error(error);
+        console.log(error);
         localStorage.removeItem("accessToken");
         return Promise.reject(error);
       }
