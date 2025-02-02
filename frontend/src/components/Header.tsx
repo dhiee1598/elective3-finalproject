@@ -45,15 +45,15 @@ const Header = () => {
           </Link>
         </div>
       )}
-      <div className="hidden md:flex md:items-center md:space-x-3">
+      <div className="hidden md:flex md:items-center md:space-x-3 text-white">
         <Link
-          className="uppercase rounded-md hover:shadow-sm hover:shadow-black px-4 py-1 font-light shadow-inner min-w-[100px] text-center shadow-slate-900"
+          className="uppercase rounded-md hover:shadow-sm hover:shadow-white px-4 py-1 font-light shadow-inner min-w-[100px] text-center shadow-slate-900"
           href={`/sign-in`}
         >
           Sign In
         </Link>
         <Link
-          className="uppercase rounded-md hover:shadow-sm hover:shadow-black px-4 py-1 font-light shadow-inner min-w-[100px] text-center shadow-slate-900"
+          className="uppercase rounded-md hover:shadow-sm hover:shadow-white px-4 py-1 font-light shadow-inner min-w-[100px] text-center shadow-slate-900"
           href={`/sign-up`}
         >
           Sign Up

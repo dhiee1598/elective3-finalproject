@@ -73,8 +73,8 @@ const AuthWrapper = ({
 
   if (!isSuccess) {
     return (
-      <div className="min-h-screen w-full flex justify-center items-center bg-stone-400">
-        <RefreshIcon className="animate-spin" />
+      <div className="bg-gradient-to-r from-slate-950 text-7xl via-slate-800 to-slate-950 text-white flex flex-col items-center justify-center h-screen">
+        <RefreshIcon className="animate-spin" fontSize="inherit" />
       </div>
     );
   }
