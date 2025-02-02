@@ -33,9 +33,14 @@ export default function Home() {
           </span>
         </Link>
       </motion.div>
-      <div className="text-3xl pt-20 font-bold text-center text-blue-500 mb-8">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+        className="text-3xl pt-20 font-bold text-center text-blue-500 mb-8"
+      >
         MOST LIKED POSTS
-      </div>
+      </motion.div>
       <div className="w-full max-w-4xl grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3].map((blog) => (
           <motion.div
