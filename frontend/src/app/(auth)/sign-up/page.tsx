@@ -48,7 +48,7 @@ const SignUpPage = () => {
   return (
     <div className="w-full bg-gradient-to-r flex justify-center items-center from-slate-950 via-slate-800 to-slate-950 text-white min-h-screen">
       <div className="w-full max-w-[450px]">
-        <h1 className="text-center mb-5 text-4xl">SIGN UP</h1>
+        <h1 className="text-center mb-5 text-5xl">SIGN UP</h1>
         <form
           onSubmit={handleSubmit}
           className="w-full p-5 md:p-10 backdrop-blur-2xl shadow-md shadow-stone-950 bg-transparent md:rounded-md"
