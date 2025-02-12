@@ -33,6 +33,9 @@ const Users = sequelize.define<UsersProps>(
     tableName: "users",
     modelName: "Users",
     timestamps: false,
+    defaultScope: {
+      attributes: { exclude: ["password"] },
+    },
   },
 );
 
