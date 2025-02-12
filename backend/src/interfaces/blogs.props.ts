@@ -17,6 +17,10 @@ export interface BlogsProps
   blogType: string;
 }
 
+export interface BlogsParams {
+  blogId: string;
+}
+
 export interface BlogsNewRequest {
   title: string;
   content: string;
