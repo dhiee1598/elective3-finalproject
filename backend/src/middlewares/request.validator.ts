@@ -89,3 +89,37 @@ export const ValidateAuthUser = [
     next();
   },
 ];
+
+export const ValidateNewBlogs = [
+  body("title").notEmpty().withMessage("Field title is required"),
+  body("content").notEmpty().withMessage("Field content is required"),
+  body("blogType").notEmpty().withMessage("Field blog type is required"),
+  (req: Request, res: Response, next: NextFunction) => {
+    const allowedFields = ["title", "content", "blogType"];
+    const receiveFields = Object.keys(req.body);
+
+    // * Check for unexpected fields
+    const extraFields = receiveFields.filter(
+      (field) => !allowedFields.includes(field),
+    );
+
+    if (extraFields.length > 0) {
+      res.status(400);
+      // ! Throw Error for unexpected fields
+      throw new Error(`Unexpected field: '${extraFields[0]}'`);
+    }
+
+    // * Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const firstError = errors.array()[0].msg as string;
+
+      res.status(400);
+      // ! Throw Error for validation errors
+      throw new Error(firstError);
+    }
+
+    // * Proceed to the next middleware if no errors
+    next();
+  },
+];
