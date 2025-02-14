@@ -1,16 +1,16 @@
-import express, { Application, Request, Response } from "express";
-import cors from "cors";
+import express, { Request, Response } from "express";
+// import cors from "cors";
 import morgan from "morgan";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import env from "./utilities/env";
+// import env from "./utilities/env";
 import { NotFound, ErrorHandler } from "./middlewares/error.handler";
 // import UserRoutes from "./routes/users.route";
 // import TokenRoutes from "./routes/token.route";
 // import BlogRoutes from "./routes/blogs.route";
 // import RequiredAuthentication from "./middlewares/auth";
 
-const ExpressConfig = (): Application => {
+const ExpressConfig = () => {
   const app = express();
 
   // * MIDDLEWARE SETUP
@@ -18,12 +18,12 @@ const ExpressConfig = (): Application => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(
-    cors({
-      credentials: true,
-      origin: env.FRONTEND_URL,
-    }),
-  );
+  // app.use(
+  //   cors({
+  //     credentials: true,
+  //     origin: env.FRONTEND_URL,
+  //   }),
+  // );
 
   // * MAIN HEALTH CHECK ROUTE
   app.get("/", (_req: Request, res: Response) => {
