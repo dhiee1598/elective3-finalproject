@@ -17,7 +17,11 @@ export const GetUsersByEmail = async (email: string) => {
 // Function to insert a new user
 export const InsertUsers = async (values: UsersNewRequest) => {
   try {
-    return await Users.create({ ...values, isAdmin: false });
+    return await Users.create({
+      ...values,
+      image_path: "/images/default_image.png",
+      isAdmin: false,
+    });
   } catch (error) {
     throw new Error(
       error instanceof Error
