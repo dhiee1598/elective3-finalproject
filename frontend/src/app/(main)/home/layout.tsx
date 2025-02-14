@@ -6,7 +6,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <AuthWrapper isAdmin={false}>
         <MainHeader />
-        {children}
+        <main className="w-full min-w-[380px]">{children}</main>
       </AuthWrapper>
     </>
   );
