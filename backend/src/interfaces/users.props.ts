@@ -14,6 +14,7 @@ export interface UsersProps
   name: string;
   email: string;
   password: string;
+  image_path: string;
   isAdmin: boolean;
 }
 
