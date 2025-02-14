@@ -5,12 +5,11 @@ export interface NewUsersProps {
 }
 
 export interface UsersProps {
-  users: {
-    userId: string;
-    name: string;
-    email: string;
-    isAdmin: boolean;
-  };
+  userId: string;
+  name: string;
+  email: string;
+  image_path: string;
+  isAdmin: boolean;
 }
 
 export interface AuthUsersProps extends UsersProps {
