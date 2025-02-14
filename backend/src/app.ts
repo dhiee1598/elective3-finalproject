@@ -8,6 +8,7 @@ import UserRoutes from "./routes/users.route";
 import TokenRoutes from "./routes/token.route";
 import BlogRoutes from "./routes/blogs.route";
 import RequiredAuthentication from "./middlewares/auth";
+import env from "./utilities/env";
 
 const ExpressConfig = (): Application => {
   const app = express();
@@ -20,7 +21,7 @@ const ExpressConfig = (): Application => {
   app.use(
     cors({
       credentials: true,
-      origin: "https://elective3-finalproject.vercel.app",
+      origin: env.FRONTEND_URL,
     }),
   );
 
