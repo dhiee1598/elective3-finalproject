@@ -24,6 +24,10 @@ const Users = sequelize.define<UsersProps>(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    image_path: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     isAdmin: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -33,9 +37,6 @@ const Users = sequelize.define<UsersProps>(
     tableName: "users",
     modelName: "Users",
     timestamps: false,
-    defaultScope: {
-      attributes: { exclude: ["password"] },
-    },
   },
 );
 
