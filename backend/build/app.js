@@ -8,12 +8,12 @@ const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const env_1 = __importDefault(require("./utilities/env"));
 const error_handler_1 = require("./middlewares/error.handler");
 const users_route_1 = __importDefault(require("./routes/users.route"));
 const token_route_1 = __importDefault(require("./routes/token.route"));
 const blogs_route_1 = __importDefault(require("./routes/blogs.route"));
 const auth_1 = __importDefault(require("./middlewares/auth"));
+const env_1 = __importDefault(require("./utilities/env"));
 const ExpressConfig = () => {
     const app = (0, express_1.default)();
     // * MIDDLEWARE SETUP
