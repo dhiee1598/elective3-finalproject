@@ -36,7 +36,7 @@ const SignInPage = () => {
   useEffect(() => {
     if (authUsers.isSuccess) {
       localStorage.setItem("accessToken", authUsers.data.accessToken);
-      if (authUsers.data.users.isAdmin === true) {
+      if (authUsers.data.isAdmin === true) {
         router.push("/dashboard");
       } else {
         router.push("/home");

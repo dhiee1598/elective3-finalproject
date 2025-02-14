@@ -33,7 +33,7 @@ export const usePostAuthUsers = (url: string) => {
       if (!error) {
         console.log(data);
         await queryClient.invalidateQueries({
-          queryKey: ["users", data?.users.userId],
+          queryKey: ["users", data?.userId],
         });
       }
     },
