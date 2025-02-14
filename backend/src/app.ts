@@ -5,10 +5,10 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import env from "./utilities/env";
 import { NotFound, ErrorHandler } from "./middlewares/error.handler";
-import UserRoutes from "./routes/users.route";
-import TokenRoutes from "./routes/token.route";
-import BlogRoutes from "./routes/blogs.route";
-import RequiredAuthentication from "./middlewares/auth";
+// import UserRoutes from "./routes/users.route";
+// import TokenRoutes from "./routes/token.route";
+// import BlogRoutes from "./routes/blogs.route";
+// import RequiredAuthentication from "./middlewares/auth";
 
 const ExpressConfig = (): Application => {
   const app = express();
@@ -26,18 +26,18 @@ const ExpressConfig = (): Application => {
   );
 
   // * MAIN HEALTH CHECK ROUTE
-  app.get("/main/healthcheck", (_req: Request, res: Response) => {
+  app.get("/", (_req: Request, res: Response) => {
     res.status(200).json({ message: "HAPPY CODING - 👋✨🌍" });
   });
 
-  // * API ROUTES FOR TOKEN
-  app.use("/api/auth/token", TokenRoutes);
-
-  // * API ROUTES FOR USERS
-  app.use("/api/users", UserRoutes);
-
-  // * API ROUTES FOR BLOGS
-  app.use("/api/blogs", RequiredAuthentication, BlogRoutes);
+  // // * API ROUTES FOR TOKEN
+  // app.use("/api/auth/token", TokenRoutes);
+  //
+  // // * API ROUTES FOR USERS
+  // app.use("/api/users", UserRoutes);
+  //
+  // // * API ROUTES FOR BLOGS
+  // app.use("/api/blogs", RequiredAuthentication, BlogRoutes);
 
   // ! CATCH ALL ERROR HANDLING
   app.use(NotFound); // Handle 404 errors (Not Found)
