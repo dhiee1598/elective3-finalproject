@@ -3,7 +3,6 @@ import cors from "cors";
 import morgan from "morgan";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import env from "./utilities/env";
 import { NotFound, ErrorHandler } from "./middlewares/error.handler";
 import UserRoutes from "./routes/users.route";
 import TokenRoutes from "./routes/token.route";
@@ -21,7 +20,7 @@ const ExpressConfig = (): Application => {
   app.use(
     cors({
       credentials: true,
-      origin: env.FRONTEND_URL,
+      origin: "https://elective3-finalproject.vercel.app",
     }),
   );
 
