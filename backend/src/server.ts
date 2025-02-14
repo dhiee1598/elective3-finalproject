@@ -12,7 +12,7 @@ const StartServer = async (): Promise<void> => {
 
     // * Start the server and listen on the specified port
     app.listen(env.PORT, () => {
-      console.log(`Listening: ${env.SERVER_URL}:${env.PORT}`);
+      console.log(`Listening: http://localhost:${env.PORT}`);
     });
   } catch (error) {
     // ! Log an error message if unable to connect to the database
