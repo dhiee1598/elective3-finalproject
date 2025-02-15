@@ -2,9 +2,7 @@ import { RequestHandler } from "express";
 import {
   UsersAuthRequest,
   UsersNewRequest,
-  UsersParams,
   UsersResponse,
-  UsersUpdateRequest,
 } from "../interfaces/users.props";
 import asyncHandler from "express-async-handler";
 import {
@@ -12,8 +10,13 @@ import {
   GetUsersById,
   InsertUsers,
   UpdateUsersById,
+  UpdateUsersPasswordById,
 } from "../services/users.service";
-import { HashPassword, IsValidPassword } from "../utilities/password.utils";
+import {
+  ComparePassword,
+  HashPassword,
+  IsValidPassword,
+} from "../utilities/password.utils";
 import {
   GenerateAccessToken,
   GenerateRefreshToken,
@@ -142,6 +145,41 @@ export const ModifyUsersInfo: RequestHandler = asyncHandler(
     res.status(200).json({
       message: "User updated successfully",
       users: updatedUser,
+    });
+  },
+);
+
+export const ModifyUserPassword: RequestHandler = asyncHandler(
+  async (req, res) => {
+    // * Check if the logged-in user is the same as the user in the request params
+    if (req.params.userId !== req.userId) {
+      // ! If the user is not authorized to modify this data, throw an error
+      res.status(401);
+      throw new Error("Unauthorized: You can only modify your own account.");
+    }
+
+    const users = await GetUsersById(req.userId);
+
+    if (!users) {
+      res.status(401);
+      // ! Throw Error if user not found
+      throw new Error("Users not found");
+    }
+
+    if (!(await ComparePassword(req.body.current_password, users.password))) {
+      console.log(req.body.current_password, users.password);
+      res.status(401);
+      throw new Error(
+        "Unathorized: You can only modify your own account. MEOW",
+      );
+    }
+
+    const hashPassword = await HashPassword(req.body.new_password);
+
+    await UpdateUsersPasswordById(hashPassword, users.userId);
+
+    res.status(200).json({
+      message: "Users password updated successfully",
     });
   },
 );
