@@ -2,12 +2,14 @@ import {
   AuthenticateUsers,
   AuthorizeUser,
   DeAuthenticateUsers,
+  ModifyUserPassword,
   ModifyUsersInfo,
   RegisterUsers,
 } from "../controllers/users.controller";
 import { Router } from "express";
 import {
   ValidateAuthUser,
+  ValidateNewPasswordRequest,
   ValidateNewUser,
   ValidateUsersUpdateInfo,
 } from "../middlewares/request.validator";
@@ -44,6 +46,16 @@ router.put(
   RequiredAuthentication,
   ValidateUsersUpdateInfo,
   ModifyUsersInfo,
+);
+
+// * Description:    Update a user password
+// * Route:          PUT /api/users/newpassword/:userId
+// * Access:         Private
+router.put(
+  "/newpassword/:userId",
+  RequiredAuthentication,
+  ValidateNewPasswordRequest,
+  ModifyUserPassword,
 );
 
 export default router;
