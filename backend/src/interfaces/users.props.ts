@@ -34,3 +34,13 @@ export interface UsersAuthRequest {
   email: string;
   password: string;
 }
+
+export interface UsersUpdateRequest {
+  name: string;
+  email: string;
+  image_path: string;
+}
+
+export interface UsersParams {
+  userId: string;
+}
