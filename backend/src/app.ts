@@ -21,7 +21,7 @@ const ExpressConfig = (): Application => {
   app.use(
     cors({
       credentials: true,
-      origin: env.FRONTEND_URL,
+      origin: [env.FRONTEND_URL, "http://localhost:3000"],
     }),
   );
 
