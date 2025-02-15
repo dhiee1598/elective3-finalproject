@@ -1,6 +1,7 @@
 "use client";
 
 import { useUserStore } from "@/store/useStoreUser";
+import { ToastContainer, toast } from "react-toastify";
 import { useState } from "react";
 import Image from "next/image";
 import {
@@ -11,6 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import api from "@/utilities/axios";
+import { isAxiosError } from "axios";
 
 const initial_value = {
   name: "",
@@ -52,24 +54,52 @@ const Profile = () => {
     setIsModalOpen(false);
   };
 
-  const handlePasswordChange = () => {
-    if (newPassword === confirmPassword) {
-      console.log("Password changed successfully");
-    } else {
-      console.log("Passwords do not match");
+  const handlePasswordChange = async () => {
+    try {
+      if (newPassword === confirmPassword) {
+        const response = await api.put(
+          `/api/users/newpassword/${users?.userId}`,
+          { current_password: currentPassword, new_password: newPassword },
+        );
+        toast.success(response.data.message);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        toast.error("New password and Confirm password do not match");
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+        console.log(error);
+      }
     }
   };
 
   const handleSaveClick = async () => {
-    const data = {
-      name: values.name,
-      email: values.email,
-      image_path: users?.image_path,
-    };
+    try {
+      const data = {
+        name: values.name,
+        email: values.email,
+        image_path: users?.image_path,
+      };
 
-    const response = await api.put(`/api/users/${users?.userId}`, data);
-    setUsers(response.data.users);
-    setIsEditing(false);
+      const response = await api.put(`/api/users/${users?.userId}`, data);
+
+      setUsers(response.data.users);
+      toast.success(response.data.message);
+
+      setIsEditing(false);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+        console.log(error);
+      }
+    }
   };
 
   const handleOpenModal = () => {
@@ -81,6 +111,9 @@ const Profile = () => {
         image_path: users.image_path,
       });
     }
+    setNewPassword("");
+    setConfirmPassword("");
+    setCurrentPassword("");
     setIsEditing(true);
   };
 
@@ -90,6 +123,9 @@ const Profile = () => {
     }
     setValues(initial_value);
     setIsEditing(false);
+    setNewPassword("");
+    setConfirmPassword("");
+    setCurrentPassword("");
   };
 
   return (
@@ -226,6 +262,7 @@ const Profile = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <ToastContainer position="bottom-right" />
     </>
   );
 };
