@@ -1,4 +1,4 @@
-import { UsersNewRequest } from "../interfaces/users.props";
+import { UsersNewRequest, UsersUpdateRequest } from "../interfaces/users.props";
 import { Users } from "../models";
 
 // Function to get a user by email
@@ -40,6 +40,24 @@ export const GetUsersById = async (id: string) => {
       error instanceof Error
         ? error.message
         : "Failed to fetch User data! Please try again.",
+    );
+  }
+};
+
+// Function to update a user by ID
+export const UpdateUsersById = async (
+  updateData: UsersUpdateRequest,
+  userId: string,
+) => {
+  try {
+    return await Users.update(updateData, {
+      where: { userId },
+    });
+  } catch (error) {
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to update User data! Please try again.",
     );
   }
 };
