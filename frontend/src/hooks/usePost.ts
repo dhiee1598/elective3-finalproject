@@ -31,7 +31,6 @@ export const usePostAuthUsers = (url: string) => {
     },
     onSettled: async (data, error) => {
       if (!error) {
-        console.log(data);
         await queryClient.invalidateQueries({
           queryKey: ["users", data?.userId],
         });
