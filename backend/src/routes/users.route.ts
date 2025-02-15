@@ -2,12 +2,14 @@ import {
   AuthenticateUsers,
   AuthorizeUser,
   DeAuthenticateUsers,
+  ModifyUsersInfo,
   RegisterUsers,
 } from "../controllers/users.controller";
 import { Router } from "express";
 import {
   ValidateAuthUser,
   ValidateNewUser,
+  ValidateUsersUpdateInfo,
 } from "../middlewares/request.validator";
 
 import RequiredAuthentication from "../middlewares/auth";
@@ -33,5 +35,15 @@ router.get("/", RequiredAuthentication, AuthorizeUser);
 // * Route:          POST /api/users/auth/sign-out
 // * Access:         Private
 router.post("/auth/sign-out", RequiredAuthentication, DeAuthenticateUsers);
+
+// * Description:    Update a user
+// * Route:          PUT /api/users/:userId
+// * Access:         Private
+router.put(
+  "/:userId",
+  RequiredAuthentication,
+  ValidateUsersUpdateInfo,
+  ModifyUsersInfo,
+);
 
 export default router;

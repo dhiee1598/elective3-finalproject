@@ -29,7 +29,7 @@ const SignUpPage = () => {
       setValues(initial_value);
       setTimeout(() => {
         router.push("/sign-in");
-      }, 3000);
+      }, 2000);
     } catch (error) {
       if (isAxiosError(error)) {
         const message =

@@ -2,13 +2,16 @@ import { RequestHandler } from "express";
 import {
   UsersAuthRequest,
   UsersNewRequest,
+  UsersParams,
   UsersResponse,
+  UsersUpdateRequest,
 } from "../interfaces/users.props";
 import asyncHandler from "express-async-handler";
 import {
   GetUsersByEmail,
   GetUsersById,
   InsertUsers,
+  UpdateUsersById,
 } from "../services/users.service";
 import { HashPassword, IsValidPassword } from "../utilities/password.utils";
 import {
@@ -108,5 +111,37 @@ export const DeAuthenticateUsers: RequestHandler = asyncHandler(
 
     // * Send a success status indicating successful logout
     res.sendStatus(200);
+  },
+);
+
+export const ModifyUsersInfo: RequestHandler = asyncHandler(
+  async (req, res) => {
+    // * Check if the logged-in user is the same as the user in the request params
+    if (req.params.userId !== req.userId) {
+      // ! If the user is not authorized to modify this data, throw an error
+      res.status(401);
+      throw new Error("Unauthorized: You can only modify your own account.");
+    }
+
+    // * Check if the email is already in use by another user
+    const users = await GetUsersByEmail(req.body.email);
+
+    // * If a user with the same email exists (excluding the current user), throw an error
+    if (users && users.userId !== req.userId) {
+      res.status(409);
+      throw new Error("Email address is already taken by another user.");
+    }
+
+    // * Proceed to update the user's information
+    await UpdateUsersById(req.body, req.params.userId);
+
+    // * Get The Updated Users
+    const updatedUser = await GetUsersById(req.params.userId);
+
+    // * Send a success response with the updated user data
+    res.status(200).json({
+      message: "User updated successfully",
+      users: updatedUser,
+    });
   },
 );
