@@ -9,5 +9,3 @@ authentication, and social interactions.
 - **User Authentication**: Sign up, log in, and manage user profiles.
 - **Post Management**: Create, edit, delete, and publish blog posts.
 - **Responsive Design**: Fully responsive for seamless access on different devices.
-
-## Updates
