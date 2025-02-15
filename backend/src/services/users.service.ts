@@ -57,7 +57,25 @@ export const UpdateUsersById = async (
     throw new Error(
       error instanceof Error
         ? error.message
-        : "Failed to update User data! Please try again.",
+        : "Failed to update Users data! Please try again.",
+    );
+  }
+};
+
+export const UpdateUsersPasswordById = async (
+  new_password: string,
+  user_id: string,
+) => {
+  try {
+    return await Users.update(
+      { password: new_password },
+      { where: { userId: user_id } },
+    );
+  } catch (error) {
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to update Users Password! Please try again.",
     );
   }
 };

@@ -2,9 +2,7 @@ import { RequestHandler } from "express";
 import {
   UsersAuthRequest,
   UsersNewRequest,
-  UsersParams,
   UsersResponse,
-  UsersUpdateRequest,
 } from "../interfaces/users.props";
 import asyncHandler from "express-async-handler";
 import {
@@ -12,8 +10,13 @@ import {
   GetUsersById,
   InsertUsers,
   UpdateUsersById,
+  UpdateUsersPasswordById,
 } from "../services/users.service";
-import { HashPassword, IsValidPassword } from "../utilities/password.utils";
+import {
+  ComparePassword,
+  HashPassword,
+  IsValidPassword,
+} from "../utilities/password.utils";
 import {
   GenerateAccessToken,
   GenerateRefreshToken,
@@ -142,6 +145,43 @@ export const ModifyUsersInfo: RequestHandler = asyncHandler(
     res.status(200).json({
       message: "User updated successfully",
       users: updatedUser,
+    });
+  },
+);
+
+export const ModifyUserPassword: RequestHandler = asyncHandler(
+  async (req, res) => {
+    // * Check if the logged-in user is the same as the user in the request params
+    if (req.params.userId !== req.userId) {
+      // ! If the user is not authorized to modify this data, return a 401 error
+      res.status(401);
+      throw new Error("Unauthorized: You can only modify your own account.");
+    }
+
+    // * Fetch the user data from the database by userId
+    const users = await GetUsersById(req.userId);
+
+    // * If the user is not found, throw a 404 error
+    if (!users) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    // * Check if the current password matches the one in the database
+    if (!(await ComparePassword(req.body.current_password, users.password))) {
+      res.status(401);
+      throw new Error("Current password is incorrect");
+    }
+
+    // * Hash the new password before updating in the database
+    const hashPassword = await HashPassword(req.body.new_password);
+
+    // * Update the user's password in the database
+    await UpdateUsersPasswordById(hashPassword, users.userId);
+
+    // * Return success message with status 200 if the password was updated successfully
+    res.status(200).json({
+      message: "User's password updated successfully",
     });
   },
 );
