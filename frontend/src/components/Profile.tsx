@@ -1,8 +1,6 @@
 "use client";
 
-import { useUserStore } from "@/store/useStoreUser";
-import { ToastContainer, toast } from "react-toastify";
-import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 import Image from "next/image";
 import {
   Dialog,
@@ -11,140 +9,70 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
-import api from "@/utilities/axios";
-import { isAxiosError } from "axios";
+import CachedSharpIcon from "@mui/icons-material/CachedSharp";
+import { ProfileInitialValue, UsersProps } from "@/interfaces/users.props";
+import { UseMutationResult } from "@tanstack/react-query";
 
-const initial_value = {
-  name: "",
-  email: "",
-  image_path: "",
-};
-
-const Profile = () => {
-  const { users, setUsers } = useUserStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [values, setValues] = useState(initial_value);
-
-  const availableImages = [
-    "/images/image1.png",
-    "/images/image2.png",
-    "/images/image3.png",
-    "/images/image4.png",
-    "/images/image5.png",
-    "/images/image6.png",
-    "/images/image7.png",
-    "/images/image8.png",
-    "/images/image9.png",
-    "/images/image10.png",
-    "/images/image11.png",
-    "/images/image12.png",
-    "/images/image13.png",
-  ];
-
-  const handleImageChange = (imagePath: string) => {
-    if (users) {
-      setUsers({ ...users, image_path: imagePath });
-    }
-    setIsModalOpen(false);
-  };
-
-  const handlePasswordChange = async () => {
-    try {
-      if (newPassword === confirmPassword) {
-        const response = await api.put(
-          `/api/users/newpassword/${users?.userId}`,
-          { current_password: currentPassword, new_password: newPassword },
-        );
-        toast.success(response.data.message);
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-      } else {
-        toast.error("New password and Confirm password do not match");
-      }
-    } catch (error) {
-      if (isAxiosError(error)) {
-        toast.error(error.response?.data.message);
-      } else {
-        toast.error("Something went wrong. Please try again.");
-        console.log(error);
-      }
-    }
-  };
-
-  const handleSaveClick = async () => {
-    try {
-      const data = {
-        name: values.name,
-        email: values.email,
-        image_path: users?.image_path,
-      };
-
-      const response = await api.put(`/api/users/${users?.userId}`, data);
-
-      setUsers(response.data.users);
-      toast.success(response.data.message);
-
-      setIsEditing(false);
-    } catch (error) {
-      if (isAxiosError(error)) {
-        toast.error(error.response?.data.message);
-      } else {
-        toast.error("Something went wrong. Please try again.");
-        console.log(error);
-      }
-    }
-  };
-
-  const handleOpenModal = () => {
-    if (users) {
-      setValues({
-        ...values,
-        name: users.name,
-        email: users.email,
-        image_path: users.image_path,
-      });
-    }
-    setNewPassword("");
-    setConfirmPassword("");
-    setCurrentPassword("");
-    setIsEditing(true);
-  };
-
-  const handleCloseModal = () => {
-    if (users) {
-      setUsers({ ...users, image_path: values.image_path });
-    }
-    setValues(initial_value);
-    setIsEditing(false);
-    setNewPassword("");
-    setConfirmPassword("");
-    setCurrentPassword("");
-  };
-
+const Profile = ({
+  users,
+  isEditing,
+  setIsModalOpen,
+  updateUsersInfo,
+  updateUsersPassword,
+  handleOpenModal,
+  handleCloseModal,
+  handlePasswordChange,
+  currentPassword,
+  confirmPassword,
+  newPassword,
+  handleImageChange,
+  handleSaveClick,
+  isModalOpen,
+  availableImages,
+  setCurrentPassword,
+  setConfirmPassword,
+  setNewPassword,
+  values,
+  setValues,
+}: {
+  users: UsersProps;
+  isEditing: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
+  updateUsersInfo: UseMutationResult<UsersProps, Error, object, unknown>;
+  updateUsersPassword: UseMutationResult<UsersProps, Error, object, unknown>;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
+  handlePasswordChange: () => void;
+  handleSaveClick: () => void;
+  handleImageChange: (imagePath: string) => void;
+  currentPassword: string;
+  confirmPassword: string;
+  newPassword: string;
+  isModalOpen: boolean;
+  availableImages: string[];
+  setCurrentPassword: (value: string) => void;
+  setConfirmPassword: (value: string) => void;
+  setNewPassword: (value: string) => void;
+  values: ProfileInitialValue;
+  setValues: React.Dispatch<React.SetStateAction<ProfileInitialValue>>;
+}) => {
   return (
     <>
       <div className="w-full max-w-lg bg-black bg-opacity-60 rounded-lg p-6 flex flex-col items-center">
         <div className="relative w-36 h-36 mb-6">
-          {users && (
-            <Image
-              src={users.image_path}
-              alt="Profile Avatar"
-              width={150}
-              height={150}
-              className="rounded-full object-cover border-4 border-white"
-            />
-          )}
-
+          <Image
+            src={users.image_path}
+            alt="Profile Avatar"
+            width={150}
+            height={150}
+            className="rounded-full object-cover border-4 border-white"
+          />
           {isEditing && (
             <button
               onClick={() => setIsModalOpen(true)}
+              disabled={
+                updateUsersInfo.isPending || updateUsersPassword.isPending
+              }
               className="absolute bottom-0 right-0 bg-blue-600 rounded-full p-2 cursor-pointer"
             >
               <span className="text-white text-xs">Upload</span>
@@ -211,18 +139,41 @@ const Profile = () => {
             </div>
             <button
               onClick={handlePasswordChange}
+              disabled={
+                updateUsersInfo.isPending || updateUsersPassword.isPending
+              }
               className="w-full px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:bg-gradient-to-l mb-2"
             >
-              Change Password
+              {updateUsersPassword.isPending ? (
+                <>
+                  Updating...<span> </span>
+                  <CachedSharpIcon className="animate-spin" />
+                </>
+              ) : (
+                "Change Password"
+              )}
             </button>
             <button
               onClick={handleSaveClick}
+              disabled={
+                updateUsersInfo.isPending || updateUsersPassword.isPending
+              }
               className="w-full px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:bg-gradient-to-l mb-2"
             >
-              Save Changes
+              {updateUsersInfo.isPending ? (
+                <>
+                  Saving...<span> </span>
+                  <CachedSharpIcon className="animate-spin" />
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </button>
             <button
               onClick={handleCloseModal}
+              disabled={
+                updateUsersInfo.isPending || updateUsersPassword.isPending
+              }
               className="w-full px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:bg-gradient-to-l"
             >
               Close
