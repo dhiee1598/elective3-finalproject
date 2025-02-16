@@ -7,9 +7,11 @@ import {
 } from "../interfaces/blogs.props";
 import {
   FetchAllBlogs,
+  FetchAllBlogsByUser,
   FetchSingleBlogsByID,
   InsertBlogs,
 } from "../services/blogs.service";
+import { GetUsersById } from "../services/users.service";
 
 export const GetAllBlogs: RequestHandler<
   unknown,
@@ -67,5 +69,31 @@ export const CreateNewBlogs: RequestHandler<
   res.status(201).json({
     message: "Blog post created successfully",
     blogs: newBlogs,
+  });
+});
+
+export const GetUsersBlogs: RequestHandler<
+  unknown,
+  BlogsResponse,
+  unknown,
+  unknown
+> = asyncHandler(async (req, res) => {
+  const id = req.userId;
+
+  const users = await GetUsersById(id);
+
+  if (!users) {
+    res.status(401);
+    // ! Throw Error if user not found
+    throw new Error("Users not found");
+  }
+
+  // * Fetch all blogs
+  const blogs = await FetchAllBlogsByUser(users.userId);
+
+  // * Return a successful response with the fetched blogs
+  res.status(200).json({
+    message: "Successfully retrived all blogs",
+    blogs: blogs,
   });
 });
