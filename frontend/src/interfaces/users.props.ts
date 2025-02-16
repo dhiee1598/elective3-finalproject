@@ -15,3 +15,9 @@ export interface UsersProps {
 export interface AuthUsersProps extends UsersProps {
   accessToken: string;
 }
+
+export interface ProfileInitialValue {
+  name: string;
+  email: string;
+  image_path: string;
+}

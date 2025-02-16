@@ -1,10 +1,10 @@
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../utilities/axios";
 import { NewUsersProps, AuthUsersProps } from "@/interfaces/users.props";
-
-const queryClient = new QueryClient();
+import { BlogsProps } from "@/interfaces/blogs.props";
 
 export const usePostUsers = (url: string) => {
+  const queryClient = useQueryClient();
   const createNewUser = useMutation({
     mutationFn: async (values: object) => {
       const response = await api.post(url, { ...values });
@@ -12,7 +12,6 @@ export const usePostUsers = (url: string) => {
     },
     onSettled: async (data, error) => {
       if (!error) {
-        console.log(data);
         await queryClient.invalidateQueries({
           queryKey: ["users", data?.userId],
         });
@@ -24,6 +23,7 @@ export const usePostUsers = (url: string) => {
 };
 
 export const usePostAuthUsers = (url: string) => {
+  const queryClient = useQueryClient();
   const authUsers = useMutation({
     mutationFn: async (values: object) => {
       const response = await api.post(url, { ...values });
@@ -39,4 +39,23 @@ export const usePostAuthUsers = (url: string) => {
   });
 
   return { authUsers };
+};
+
+export const usePostBlogs = (url: string) => {
+  const queryClient = useQueryClient();
+  const createNewBlogs = useMutation({
+    mutationFn: async (values: object) => {
+      const response = await api.post(url, { ...values });
+      return response.data as BlogsProps;
+    },
+    onSettled: async (_data, error) => {
+      if (!error) {
+        await queryClient.invalidateQueries({
+          queryKey: ["blogs"],
+        });
+      }
+    },
+  });
+
+  return { createNewBlogs };
 };

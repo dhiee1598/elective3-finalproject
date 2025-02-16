@@ -15,6 +15,7 @@ import {
 } from "../middlewares/request.validator";
 
 import RequiredAuthentication from "../middlewares/auth";
+import { GetUsersBlogs } from "../controllers/blogs.controller";
 
 const router = Router();
 
@@ -57,5 +58,10 @@ router.put(
   ValidateNewPasswordRequest,
   ModifyUserPassword,
 );
+
+// * Description:    Get All Users Blog
+// * Route:          GET /api/users/blogs
+// * Access:         Private
+router.get("/blogs", RequiredAuthentication, GetUsersBlogs);
 
 export default router;
