@@ -179,9 +179,13 @@ export const ModifyUserPassword: RequestHandler = asyncHandler(
     // * Update the user's password in the database
     await UpdateUsersPasswordById(hashPassword, users.userId);
 
+    // * Get The Updated Users
+    const updatedUser = await GetUsersById(req.params.userId);
+
     // * Return success message with status 200 if the password was updated successfully
     res.status(200).json({
       message: "User's password updated successfully",
+      users: updatedUser,
     });
   },
 );
