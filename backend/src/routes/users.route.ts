@@ -2,6 +2,7 @@ import {
   AuthenticateUsers,
   AuthorizeUser,
   DeAuthenticateUsers,
+  GetSingleUser,
   ModifyUserPassword,
   ModifyUsersInfo,
   RegisterUsers,
@@ -13,9 +14,7 @@ import {
   ValidateNewUser,
   ValidateUsersUpdateInfo,
 } from "../middlewares/request.validator";
-
 import RequiredAuthentication from "../middlewares/auth";
-import { GetUsersBlogs } from "../controllers/blogs.controller";
 
 const router = Router();
 
@@ -49,6 +48,11 @@ router.put(
   ModifyUsersInfo,
 );
 
+// * Description:    Get Single User
+// * Route:          GET /api/users/:userId
+// * Access:         Private
+router.get("/:userId", RequiredAuthentication, GetSingleUser);
+
 // * Description:    Update a user password
 // * Route:          PUT /api/users/newpassword/:userId
 // * Access:         Private
@@ -58,10 +62,5 @@ router.put(
   ValidateNewPasswordRequest,
   ModifyUserPassword,
 );
-
-// * Description:    Get All Users Blog
-// * Route:          GET /api/users/blogs
-// * Access:         Private
-router.get("/blogs", RequiredAuthentication, GetUsersBlogs);
 
 export default router;

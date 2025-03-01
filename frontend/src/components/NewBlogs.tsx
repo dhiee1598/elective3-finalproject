@@ -33,7 +33,7 @@ const NewBlogs = () => {
   const { createNewBlogs } = usePostBlogs("/api/blogs");
 
   return (
-    <div className="w-full max-w-lg bg-black bg-opacity-60 rounded-lg p-8 flex flex-col items-center">
+    <div className="w-full max-w-lg bg-black bg-opacity-60 rounded-lg p-8 flex flex-col items-center mb-4 border border-gray-200">
       <h2 className="text-3xl font-bold text-center mb-6 text-white">
         Create Your Blog
       </h2>
