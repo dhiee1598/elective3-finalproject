@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../utilities/axios";
 import { NewUsersProps, AuthUsersProps } from "@/interfaces/users.props";
 import { BlogsProps } from "@/interfaces/blogs.props";
+import { LikesProps } from "@/interfaces/likes.props";
 
 export const usePostUsers = (url: string) => {
   const queryClient = useQueryClient();
@@ -58,4 +59,23 @@ export const usePostBlogs = (url: string) => {
   });
 
   return { createNewBlogs };
+};
+
+export const usePostLikes = (url: string) => {
+  const queryClient = useQueryClient();
+  const createNewLikes = useMutation({
+    mutationFn: async (values: object) => {
+      const response = await api.post(url, { ...values });
+      return response.data.likes as LikesProps;
+    },
+    onSettled: async (_data, error) => {
+      if (!error) {
+        await queryClient.invalidateQueries({
+          queryKey: ["blogs"],
+        });
+      }
+    },
+  });
+
+  return { createNewLikes };
 };

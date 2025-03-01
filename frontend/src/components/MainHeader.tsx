@@ -9,11 +9,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import api from "@/utilities/axios";
+import { useUserStore } from "@/store/useStoreUser";
 
 const MainHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenuBar = () => setIsOpen(!isOpen);
 
+  const { users } = useUserStore();
   const router = useRouter();
 
   const handleButtonLogout = async () => {
@@ -54,7 +56,7 @@ const MainHeader = () => {
           </Link>
           <Link
             className="w-full px-14 flex items-center text-lg text-start py-2 hover:bg-blue-900 uppercase"
-            href={`/home/profile`}
+            href={`/home/profile/${users?.userId}`}
             onClick={() => setIsOpen(!isOpen)}
           >
             <AccountBoxIcon fontSize="large" className="mr-14" /> Profile
@@ -76,7 +78,7 @@ const MainHeader = () => {
         </Link>
         <Link
           className="px-4 py-2 bg-blue-800 text-white font-medium text-lg rounded-xl shadow-md hover:bg-white hover:text-black transition-all duration-300"
-          href={`/home/profile`}
+          href={`/home/profile/${users?.userId}`}
         >
           Profile
         </Link>

@@ -1,12 +1,18 @@
 import asyncHandler from "express-async-handler";
 import jwt, { VerifyErrors } from "jsonwebtoken";
 import env from "../utilities/env";
+import { RequestHandler } from "express";
 
 interface TokenInterface {
   userId: string;
 }
 
-const RequiredAuthentication = asyncHandler(async (req, res, next) => {
+const RequiredAuthentication: RequestHandler<
+  unknown,
+  unknown,
+  unknown,
+  unknown
+> = asyncHandler(async (req, res, next) => {
   // * Extract access token from Authorization header
   const authHeader = req.headers["authorization"];
   const accessToken = authHeader && authHeader.split(" ")[1];
