@@ -1,4 +1,4 @@
-import { Blogs, Users } from "../models";
+import { Blogs, Likes, Users } from "../models";
 import { BlogsNewRequest } from "../interfaces/blogs.props";
 
 // Function to insert a new blogs
@@ -17,7 +17,26 @@ export const InsertBlogs = async (values: BlogsNewRequest, userId: string) => {
 // Function to get all blogs by userId
 export const FetchAllBlogsByUser = async (id: string) => {
   try {
-    return await Blogs.findAll({ where: { userId: id } });
+    return await Blogs.findAll({
+      where: { userId: id },
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: Users,
+          attributes: { exclude: ["password", "userId"] },
+        },
+        {
+          model: Likes,
+          attributes: { exclude: ["blogId"] },
+          include: [
+            {
+              model: Users,
+              attributes: { exclude: ["password", "userId"] },
+            },
+          ],
+        },
+      ],
+    });
   } catch (error) {
     throw new Error(
       error instanceof Error
@@ -31,7 +50,23 @@ export const FetchAllBlogsByUser = async (id: string) => {
 export const FetchAllBlogs = async () => {
   try {
     return await Blogs.findAll({
-      include: Users,
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: Users,
+          attributes: { exclude: ["password", "userId"] },
+        },
+        {
+          model: Likes,
+          attributes: { exclude: ["blogId"] },
+          include: [
+            {
+              model: Users,
+              attributes: { exclude: ["password", "userId"] },
+            },
+          ],
+        },
+      ],
     });
   } catch (error) {
     throw new Error(

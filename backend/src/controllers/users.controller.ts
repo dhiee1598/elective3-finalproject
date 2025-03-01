@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import {
   UsersAuthRequest,
   UsersNewRequest,
+  UsersParams,
   UsersResponse,
 } from "../interfaces/users.props";
 import asyncHandler from "express-async-handler";
@@ -22,6 +23,27 @@ import {
   GenerateRefreshToken,
 } from "../utilities/generate.token";
 import StoreCookieToken from "../utilities/store.cookie";
+
+export const GetSingleUser: RequestHandler<
+  UsersParams,
+  UsersResponse,
+  unknown,
+  unknown
+> = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+
+  const user = await GetUsersById(userId);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("Users not found!");
+  }
+
+  res.status(200).json({
+    message: "Users",
+    users: user,
+  });
+});
 
 export const RegisterUsers: RequestHandler<
   unknown,

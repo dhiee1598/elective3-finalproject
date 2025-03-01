@@ -7,6 +7,7 @@ import { NotFound, ErrorHandler } from "./middlewares/error.handler";
 import UserRoutes from "./routes/users.route";
 import TokenRoutes from "./routes/token.route";
 import BlogRoutes from "./routes/blogs.route";
+import LikesRoutes from "./routes/likes.route";
 import RequiredAuthentication from "./middlewares/auth";
 import env from "./utilities/env";
 
@@ -38,6 +39,9 @@ const ExpressConfig = (): Application => {
 
   // * API ROUTES FOR BLOGS
   app.use("/api/blogs", RequiredAuthentication, BlogRoutes);
+
+  // * API ROUTES FOR BLOGS
+  app.use("/api/likes", RequiredAuthentication, LikesRoutes);
 
   // ! CATCH ALL ERROR HANDLING
   app.use(NotFound); // Handle 404 errors (Not Found)

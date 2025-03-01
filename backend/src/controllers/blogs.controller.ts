@@ -12,6 +12,7 @@ import {
   InsertBlogs,
 } from "../services/blogs.service";
 import { GetUsersById } from "../services/users.service";
+import { UsersParams } from "interfaces/users.props";
 
 export const GetAllBlogs: RequestHandler<
   unknown,
@@ -73,12 +74,12 @@ export const CreateNewBlogs: RequestHandler<
 });
 
 export const GetUsersBlogs: RequestHandler<
-  unknown,
+  UsersParams,
   BlogsResponse,
   unknown,
   unknown
 > = asyncHandler(async (req, res) => {
-  const id = req.userId;
+  const id = req.params.userId;
 
   const users = await GetUsersById(id);
 

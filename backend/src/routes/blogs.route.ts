@@ -3,6 +3,7 @@ import {
   CreateNewBlogs,
   GetAllBlogs,
   GetSingleBlogs,
+  GetUsersBlogs,
 } from "../controllers/blogs.controller";
 import { Router } from "express";
 
@@ -22,5 +23,10 @@ router.get("/:blogId", GetSingleBlogs);
 // * Route:          POST /api/blogs
 // * Access:         Private
 router.post("/", ValidateNewBlogs, CreateNewBlogs);
+
+// * Description:    Get All Users Blog
+// * Route:          GET /api/blogs/users/:userId
+// * Access:         Private
+router.get("/users/:userId", GetUsersBlogs);
 
 export default router;
