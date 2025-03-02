@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePostAuthUsers } from "@/hooks/usePost";
 import { isAxiosError } from "axios";
 import ErrorMessage from "@/components/ErrorMessage";
+import { CachedSharp } from "@mui/icons-material";
 
 const initial_value = {
   email: "",
@@ -22,7 +23,14 @@ const SignInPage = () => {
     e.preventDefault();
 
     try {
-      await authUsers.mutateAsync(values);
+      const response = await authUsers.mutateAsync(values);
+
+      localStorage.setItem("accessToken", response.accessToken);
+      if (response.isAdmin === true) {
+        router.push("/dashboard");
+      } else {
+        router.push("/home");
+      }
     } catch (error) {
       if (isAxiosError(error)) {
         setErrorMessage(error.response?.data.message);
@@ -32,17 +40,6 @@ const SignInPage = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    if (authUsers.isSuccess) {
-      localStorage.setItem("accessToken", authUsers.data.accessToken);
-      if (authUsers.data.isAdmin === true) {
-        router.push("/dashboard");
-      } else {
-        router.push("/home");
-      }
-    }
-  }, [authUsers, router]);
 
   return (
     <div className="w-full bg-gradient-to-r flex justify-center items-center from-slate-950 via-slate-800 to-slate-950 text-white min-h-screen">
@@ -76,9 +73,14 @@ const SignInPage = () => {
           </div>
           <button
             type="submit"
+            disabled={authUsers.isPending}
             className="text-center w-full mb-2 bg-blue-900 py-2 rounded-md hover:bg-blue-800 transition-colors duration-300"
           >
-            Submit
+            {authUsers.isPending ? (
+              <CachedSharp className="animate-spin" />
+            ) : (
+              "Submit"
+            )}
           </button>
           <button
             type="button"

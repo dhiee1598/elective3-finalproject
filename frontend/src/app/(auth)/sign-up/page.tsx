@@ -7,6 +7,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import { isAxiosError } from "axios";
 import ErrorMessage from "@/components/ErrorMessage";
 import SuccessMessage from "@/components/SuccessMessage";
+import { CachedSharp } from "@mui/icons-material";
 
 const initial_value = {
   name: "",
@@ -26,7 +27,6 @@ const SignUpPage = () => {
 
     try {
       await createNewUser.mutateAsync(values);
-      setValues(initial_value);
       setTimeout(() => {
         router.push("/sign-in");
       }, 2000);
@@ -94,8 +94,14 @@ const SignUpPage = () => {
           </div>
           <button
             type="submit"
+            disabled={createNewUser.isPending}
             className="text-center w-full mb-2 bg-blue-900 py-2 rounded-md hover:bg-blue-800 transition-colors duration-300"
           >
+            {createNewUser.isPending ? (
+              <CachedSharp className="animate-spin" />
+            ) : (
+              "Submit"
+            )}
             Submit
           </button>
           <button

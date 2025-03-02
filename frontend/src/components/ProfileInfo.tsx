@@ -135,7 +135,7 @@ const ProfileInfo = ({
 
   return (
     <>
-      <div className="w-full border border-gray-200 max-w-lg bg-black bg-opacity-60 rounded-lg p-6 flex flex-col items-center mb-4">
+      <div className="w-full border border-gray-200 max-w-lg bg-slate-950 shadow-md shadow-black bg-opacity-60 rounded-lg p-6 flex flex-col items-center mb-4">
         {!hasPermission && (
           <>
             <Image

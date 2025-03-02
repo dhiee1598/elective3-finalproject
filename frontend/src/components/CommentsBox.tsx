@@ -6,6 +6,7 @@ import { usePostComments } from "@/hooks/usePost";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { FormatDate } from "@/utilities/formatDate";
+import { CachedSharp } from "@mui/icons-material";
 
 const CommentsBox = ({
   comments,
@@ -26,17 +27,21 @@ const CommentsBox = ({
   const handleAddComment = async () => {
     if (newComment.trim() === "") return;
 
-    const response = await createNewComments.mutateAsync({
-      blogId: blogId,
-      content: newComment,
-    });
+    try {
+      await createNewComments.mutateAsync({
+        blogId: blogId,
+        content: newComment,
+      });
 
-    console.log(response);
+      setNewComment("");
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+    }
   };
 
   return (
     <div className="fixed inset-0 p-4 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="w-full h-[calc(100vh-100px)] mt-20 overflow-auto  p-4 bg-gray-800 text-white rounded-lg">
+      <div className="w-full h-[calc(100vh-100px)] mt-20 overflow-auto  p-4 bg-gray-900 text-white rounded-lg">
         {/* Close Button */}
         <IconButton
           onClick={() => {
@@ -45,7 +50,7 @@ const CommentsBox = ({
           }}
           className="text-white float-right"
         >
-          <CloseIcon />
+          <CloseIcon className="text-white" />
         </IconButton>
 
         <h3 className="text-lg mt-2 font-semibold mb-3">Comments</h3>
@@ -90,9 +95,14 @@ const CommentsBox = ({
           />
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            disabled={createNewComments.isPending}
             onClick={handleAddComment}
           >
-            Post
+            {createNewComments.isPending ? (
+              <CachedSharp className="animate-spin" />
+            ) : (
+              "Post"
+            )}
           </button>
         </div>
       </div>

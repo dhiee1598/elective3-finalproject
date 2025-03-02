@@ -1,7 +1,12 @@
 "use client";
 
 import { useDeleteBlogs, useDeleteLikes } from "@/hooks/useDelete";
-import { ThumbUp, ThumbUpOffAlt, ChatBubbleOutline } from "@mui/icons-material";
+import {
+  ThumbUp,
+  ThumbUpOffAlt,
+  ChatBubbleOutline,
+  CachedSharp,
+} from "@mui/icons-material";
 import { usePostLikes } from "@/hooks/usePost";
 import { BlogsProps } from "@/interfaces/blogs.props";
 import { UsersProps } from "@/interfaces/users.props";
@@ -35,12 +40,13 @@ const BlogsCard = ({
   const hasPermission = blog.userId === activeUser?.userId ? true : false;
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [userLikeId, setUserLikeId] = useState<string>(userLike?.likeId ?? "");
   const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(false);
 
-  const [isLiked, setIsLiked] = useState(hasLiked);
   const { createNewLikes } = usePostLikes("/api/likes");
-  const { deleteLikeBlogs } = useDeleteLikes("/api/likes", userLikeId);
+  const { deleteLikeBlogs } = useDeleteLikes(
+    "/api/likes",
+    userLike?.likeId || "",
+  );
   const { deleteBlogs } = useDeleteBlogs("/api/blogs", blog.blogId);
 
   // Handle Delete Blog Click
@@ -50,41 +56,30 @@ const BlogsCard = ({
       toast.success("Blog has been deleted successfully.");
     } catch (error) {
       console.log("Error handling like/unlike:", error);
-      setIsLiked(hasLiked);
       toast.error("Something went wrong. Please try again.");
     }
   };
 
   const handleLikeClick = async () => {
     try {
-      if (isLiked) {
-        if (!userLikeId) {
-          console.warn("Cannot unlike: likeId is missing");
-          return;
-        }
-
-        setIsLiked(false);
+      if (hasLiked) {
         await deleteLikeBlogs.mutateAsync();
-        setUserLikeId("");
         toast.success("You unliked the blog.");
       } else {
-        const response = await createNewLikes.mutateAsync({
+        await createNewLikes.mutateAsync({
           blogId: blog.blogId,
           userId: activeUser?.userId,
         });
 
-        setUserLikeId(response.likeId || "");
-        setIsLiked(true);
         toast.success("You liked the blog!");
       }
     } catch (error) {
       console.log("Error handling like/unlike:", error);
-      setIsLiked(hasLiked);
       toast.error("Something went wrong. Please try again.");
     }
   };
   return (
-    <div className="w-full max-w-lg bg-black bg-opacity-60 rounded-lg shadow-lg overflow-hidden border border-gray-200 p-4 sm:p-6 relative">
+    <div className="w-full max-w-lg bg-slate-950 shadow-black shadow-md bg-opacity-60 rounded-lg shadow-lg overflow-hidden border border-gray-200 p-4 sm:p-6 relative">
       <div className="flex items-center space-x-4">
         <Image
           src={blog.User.image_path}
@@ -111,12 +106,19 @@ const BlogsCard = ({
           <div className="flex items-center space-x-1">
             <button
               onClick={handleLikeClick}
+              disabled={createNewLikes.isPending || deleteLikeBlogs.isPending}
               className={`flex items-center gap-1 px-2 text-sm py-2 font-semibold rounded-lg transition ${
-                isLiked ? "text-blue-500" : "text-gray-300"
+                hasLiked ? "text-blue-500" : "text-gray-300"
               }`}
             >
-              {isLiked ? <ThumbUp /> : <ThumbUpOffAlt />}
-              {isLiked ? "Liked" : "Like"}
+              {createNewLikes.isPending || deleteLikeBlogs.isPending ? (
+                <CachedSharp className="animate-spin text-gray-300" />
+              ) : (
+                <>
+                  {hasLiked ? <ThumbUp /> : <ThumbUpOffAlt />}
+                  {hasLiked ? "Liked" : "Like"}
+                </>
+              )}
             </button>
             <span className="text-gray-300 text-xs">
               {blog.Likes.length}{" "}
