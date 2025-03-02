@@ -102,7 +102,6 @@ const SignUpPage = () => {
             ) : (
               "Submit"
             )}
-            Submit
           </button>
           <button
             type="button"
