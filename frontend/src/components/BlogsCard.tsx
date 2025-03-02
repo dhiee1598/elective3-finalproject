@@ -1,6 +1,7 @@
 "use client";
 
 import { useDeleteBlogs, useDeleteLikes } from "@/hooks/useDelete";
+import { ThumbUp, ThumbUpOffAlt, ChatBubbleOutline } from "@mui/icons-material";
 import { usePostLikes } from "@/hooks/usePost";
 import { BlogsProps } from "@/interfaces/blogs.props";
 import { UsersProps } from "@/interfaces/users.props";
@@ -93,9 +94,7 @@ const BlogsCard = ({
           height={48}
         />
         <div>
-          <p className="text-sm font-semibold text-gray-100">
-            {blog.User.name}
-          </p>
+          <p className=" font-semibold text-gray-100">{blog.User.name}</p>
           <p className="text-xs text-gray-300">{FormatDate(blog.createdAt)}</p>
         </div>
       </div>
@@ -108,25 +107,36 @@ const BlogsCard = ({
         <p className="mt-4 text-gray-400 text-sm sm:text-base">
           {blog.content.slice(0, 150)}...
         </p>
-        <div className="mt-4 flex flex-wrap text-sm justify-between items-center">
-          <div className="flex items-center space-x-2">
+        <div className="mt-4 flex flex-wrap justify-between items-center">
+          <div className="flex items-center space-x-1">
             <button
               onClick={handleLikeClick}
-              className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600"
+              className={`flex items-center gap-1 px-2 text-sm py-2 font-semibold rounded-lg transition ${
+                isLiked ? "text-blue-500" : "text-gray-300"
+              }`}
             >
-              {isLiked ? "Unlike" : "Like"}
+              {isLiked ? <ThumbUp /> : <ThumbUpOffAlt />}
+              {isLiked ? "Liked" : "Like"}
             </button>
-            <span className="text-gray-300">{blog.Likes.length} Likes</span>
+            <span className="text-gray-300 text-xs">
+              {blog.Likes.length}{" "}
+              {blog.Likes.length === 0 || blog.Likes.length === 1
+                ? "Like"
+                : "Likes"}
+            </span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             <button
               onClick={() => setIsCommentBoxOpen(true)}
-              className="px-4 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600"
+              className={`flex items-center gap-2 px-2 text-sm py-2 font-semibold rounded-lg transition`}
             >
-              Comment
+              <ChatBubbleOutline />
             </button>
-            <span className="text-gray-300">
-              {blog.Comments.length} Comments
+            <span className="text-gray-300 text-xs">
+              {blog.Comments.length}{" "}
+              {blog.Comments.length === 0 || blog.Comments.length === 1
+                ? "Comment"
+                : "Comments"}
             </span>
           </div>
         </div>
