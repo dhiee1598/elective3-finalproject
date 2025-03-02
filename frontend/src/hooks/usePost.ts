@@ -3,6 +3,7 @@ import api from "../utilities/axios";
 import { NewUsersProps, AuthUsersProps } from "@/interfaces/users.props";
 import { BlogsProps } from "@/interfaces/blogs.props";
 import { LikesProps } from "@/interfaces/likes.props";
+import { CommentProps } from "postcss";
 
 export const usePostUsers = (url: string) => {
   const queryClient = useQueryClient();
@@ -78,4 +79,23 @@ export const usePostLikes = (url: string) => {
   });
 
   return { createNewLikes };
+};
+
+export const usePostComments = (url: string) => {
+  const queryClient = useQueryClient();
+  const createNewComments = useMutation({
+    mutationFn: async (values: object) => {
+      const response = await api.post(url, { ...values });
+      return response.data.comments as CommentProps;
+    },
+    onSettled: async (_data, error) => {
+      if (!error) {
+        await queryClient.invalidateQueries({
+          queryKey: ["blogs"],
+        });
+      }
+    },
+  });
+
+  return { createNewComments };
 };

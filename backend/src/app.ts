@@ -8,6 +8,7 @@ import UserRoutes from "./routes/users.route";
 import TokenRoutes from "./routes/token.route";
 import BlogRoutes from "./routes/blogs.route";
 import LikesRoutes from "./routes/likes.route";
+import CommentsRoutes from "./routes/comments.route";
 import RequiredAuthentication from "./middlewares/auth";
 import env from "./utilities/env";
 
@@ -42,6 +43,9 @@ const ExpressConfig = (): Application => {
 
   // * API ROUTES FOR BLOGS
   app.use("/api/likes", RequiredAuthentication, LikesRoutes);
+
+  // * API ROUTES FOR BLOGS
+  app.use("/api/comments", RequiredAuthentication, CommentsRoutes);
 
   // ! CATCH ALL ERROR HANDLING
   app.use(NotFound); // Handle 404 errors (Not Found)

@@ -1,4 +1,4 @@
-import { Blogs, Likes, Users } from "../models";
+import { Blogs, Comments, Likes, Users } from "../models";
 import { BlogsNewRequest } from "../interfaces/blogs.props";
 
 // Function to insert a new blogs
@@ -27,6 +27,16 @@ export const FetchAllBlogsByUser = async (id: string) => {
         },
         {
           model: Likes,
+          attributes: { exclude: ["blogId"] },
+          include: [
+            {
+              model: Users,
+              attributes: { exclude: ["password", "userId"] },
+            },
+          ],
+        },
+        {
+          model: Comments,
           attributes: { exclude: ["blogId"] },
           include: [
             {
@@ -66,6 +76,16 @@ export const FetchAllBlogs = async () => {
             },
           ],
         },
+        {
+          model: Comments,
+          attributes: { exclude: ["blogId"] },
+          include: [
+            {
+              model: Users,
+              attributes: { exclude: ["password", "userId"] },
+            },
+          ],
+        },
       ],
     });
   } catch (error) {
@@ -86,6 +106,19 @@ export const FetchSingleBlogsByID = async (blogId: string) => {
       error instanceof Error
         ? error.message
         : "Failed to fetch all Blogs! Please try again.",
+    );
+  }
+};
+
+// Function to Blogs
+export const DeleteBlogs = async (blogId: string) => {
+  try {
+    return await Blogs.destroy({ where: { blogId: blogId } });
+  } catch (error) {
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to delete Blogs! Please try again.",
     );
   }
 };

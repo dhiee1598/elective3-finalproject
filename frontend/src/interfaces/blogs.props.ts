@@ -10,6 +10,16 @@ interface LikesBlogProps {
   User: UserBlogProps;
 }
 
+interface CommentsBlogProps {
+  commentId: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  blogId: string;
+  User: UserBlogProps;
+}
+
 export interface BlogsProps {
   blogId: string;
   title: string;
@@ -20,4 +30,5 @@ export interface BlogsProps {
   updatedAt: string;
   User: UserBlogProps;
   Likes: LikesBlogProps[];
+  Comments: CommentsBlogProps[];
 }

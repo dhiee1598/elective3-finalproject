@@ -4,6 +4,7 @@ import {
   GetAllBlogs,
   GetSingleBlogs,
   GetUsersBlogs,
+  RemoveBlogs,
 } from "../controllers/blogs.controller";
 import { Router } from "express";
 
@@ -28,5 +29,10 @@ router.post("/", ValidateNewBlogs, CreateNewBlogs);
 // * Route:          GET /api/blogs/users/:userId
 // * Access:         Private
 router.get("/users/:userId", GetUsersBlogs);
+
+// * Description:    Delete Users Blog
+// * Route:          DELETE /api/blogs/:blogId
+// * Access:         Private
+router.delete("/:blogId", RemoveBlogs);
 
 export default router;

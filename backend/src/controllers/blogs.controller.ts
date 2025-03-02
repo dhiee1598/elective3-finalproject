@@ -6,6 +6,7 @@ import {
   BlogsResponse,
 } from "../interfaces/blogs.props";
 import {
+  DeleteBlogs,
   FetchAllBlogs,
   FetchAllBlogsByUser,
   FetchSingleBlogsByID,
@@ -97,4 +98,33 @@ export const GetUsersBlogs: RequestHandler<
     message: "Successfully retrived all blogs",
     blogs: blogs,
   });
+});
+
+export const RemoveBlogs: RequestHandler<
+  BlogsParams,
+  unknown,
+  unknown,
+  unknown
+> = asyncHandler(async (req, res) => {
+  const userId = req.userId;
+
+  // Fetch blog by ID
+  const blogs = await FetchSingleBlogsByID(req.params.blogId);
+
+  // If blog does not exist, return a 404 Not Found error
+  if (!blogs) {
+    res.status(404);
+    throw new Error("Blogs Not Found");
+  }
+
+  // Ensure that user deleting the blog is the owner
+  if (userId !== blogs.userId) {
+    res.status(403);
+    throw new Error("Unathorized Users");
+  }
+
+  await DeleteBlogs(blogs.blogId);
+
+  // Return success response
+  res.status(200).json({ success: true, message: "Blog successfully deleted" });
 });

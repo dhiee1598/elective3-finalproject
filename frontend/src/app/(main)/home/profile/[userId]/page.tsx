@@ -25,7 +25,8 @@ const ProfilePage = () => {
   }, [getSingleUsers.data, activeUsers.users]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r pb-28 pt-36 flex justify-center items-center from-slate-950 via-slate-800 to-slate-950 flex-col text-white p-6">
+    <div className="min-h-screen bg-gradient-to-r pb-28 pt-36 flex flex-col items-center text-white p-6 from-slate-950 via-slate-800 to-slate-950">
+      {/* Profile Skeleton or Profile Info */}
       {getSingleUsers.isLoading ? (
         <Box
           sx={{
@@ -36,6 +37,7 @@ const ProfilePage = () => {
             p: 3,
             borderRadius: 2,
             width: 300,
+            mb: 2,
           }}
         >
           <Skeleton variant="circular" width={80} height={80} />
@@ -55,61 +57,69 @@ const ProfilePage = () => {
           />
         )
       )}
+
       {hasPermission && <NewBlogs />}
+
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full"
+        className="w-full flex flex-col items-center justify-center mt-2"
       >
         {getUserBlogs.isLoading ? (
-          Array.from({ length: 3 }).map((_, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  bgcolor: "rgba(255, 255, 255, 0.1)",
-                  p: 2,
-                  borderRadius: 2,
-                  width: 300,
-                }}
+          <div className="flex flex-wrap justify-center gap-6 w-full">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                <Skeleton variant="rectangular" width="100%" height={180} />
-                <Skeleton
-                  variant="text"
-                  width="80%"
-                  height={30}
-                  sx={{ mt: 2 }}
-                />
-                <Skeleton
-                  variant="text"
-                  width="60%"
-                  height={20}
-                  sx={{ mt: 1 }}
-                />
-              </Box>
-            </motion.div>
-          ))
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    bgcolor: "rgba(255, 255, 255, 0.1)",
+                    p: 2,
+                    borderRadius: 2,
+                    width: 300,
+                    mx: "auto",
+                    mt: 2,
+                  }}
+                >
+                  <Skeleton variant="rectangular" width="100%" height={180} />
+                  <Skeleton
+                    variant="text"
+                    width="80%"
+                    height={30}
+                    sx={{ mt: 2 }}
+                  />
+                  <Skeleton
+                    variant="text"
+                    width="60%"
+                    height={20}
+                    sx={{ mt: 1 }}
+                  />
+                </Box>
+              </motion.div>
+            ))}
+          </div>
         ) : getUserBlogs.data && getUserBlogs.data.length > 0 ? (
-          getUserBlogs.data.map((blog, index) => (
-            <motion.div
-              key={blog.blogId}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-            >
-              <BlogsCard blog={blog} activeUser={activeUsers.users} />
-            </motion.div>
-          ))
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-2">
+            {getUserBlogs.data.map((blog, index) => (
+              <motion.div
+                key={blog.blogId}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <BlogsCard blog={blog} activeUser={activeUsers.users} />
+              </motion.div>
+            ))}
+          </div>
         ) : (
           <motion.div
-            className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-gray-400 text-lg mb-4"
+            className="text-center text-gray-400 text-lg mb-4"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
